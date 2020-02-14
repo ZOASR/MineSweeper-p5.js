@@ -46,38 +46,29 @@ class Board {
 
 
     populateBoard() {
-        for (let i = 0; i <= this.bombs; i++) {
-            const x = floor(random(this.cols));
-            const y = floor(random(this.rows));
-            this.grid[x][y].mine = true;
-        }
-
         this.easy.hide();
         this.medium.hide();
         this.hard.hide();
 
         this.message.position(this.cols * this.scl + 50 + this.x, 140 + this.y);
         this.message.show();
-        for (let i = 0; i <= 10; i++) {
-            for (let i = 0; i < this.cols; i++) {
-                for (let j = 0; j < this.rows; j++) {
-                    if (this.grid[i][j].mine) {
-                        this.n++;
-                    }
-                }
-            }
 
-            if (this.n != this.bombs) {
-                for (let i = 0; i <= this.bombs - this.n; i++) {
-                    let x = floor(random(this.cols));
-                    let y = floor(random(this.rows));
-                    if (this.grid[x][y].mine == false) {
-                        this.grid[x][y].mine = true;
-                    } else if (this.grid[x][y].mine) {
-                        x = floor(random(this.cols));
-                        y = floor(random(this.rows));
-                        this.grid[x][y].mine = true;
-                    }
+        for (let i = 0; i <= this.bombs; i++) {
+            const x = floor(random(this.cols));
+            const y = floor(random(this.rows));
+            this.grid[x][y].mine = true;
+            this.n++;
+        }
+        if (this.n < this.bombs) {
+            for (let i = 0; i <= this.bombs - this.n; i++) {
+                let x = floor(random(this.cols));
+                let y = floor(random(this.rows));
+                if (this.grid[x][y].mine == false) {
+                    this.grid[x][y].mine = true;
+                } else if (this.grid[x][y].mine) {
+                    x = floor(random(this.cols));
+                    y = floor(random(this.rows));
+                    this.grid[x][y].mine = true;
                 }
             }
         }
@@ -101,7 +92,7 @@ class Board {
 
     WIN() {
         imageMode(CENTER);
-        image(cool, this.scl * this.rows / 2 + this.x, this.scl * this.cols / 2 + this.y, this.scl * this.rows, this.scl * this.cols);
+        image(cool, (this.scl * this.rows + this.x) / 2, (this.scl * this.cols + this.y) / 2, this.scl * this.rows, this.scl * this.rows);
         setTimeout(noLoop, 50);
         setTimeout(window.location.reload(), 2000);
     }
@@ -144,9 +135,6 @@ class Board {
             for (let i = 0; i < this.cols; i++) {
                 for (let j = 0; j < this.rows; j++) {
                     this.grid[i][j].show();
-                    if (this.grid[i][j].revealed && this.grid[i][j].mine) {
-                        this.gameOver();
-                    }
                 }
             }
         } else if (this.bombs == 0) {
@@ -179,29 +167,21 @@ class Board {
     check() {
         for (let i = 0; i < this.cols; i++) {
             for (let j = 0; j < this.rows; j++) {
-                this.grid[i][j].checkNeighbor();
-                this.grid[i][j].checkMarked();
-
                 if (!this.bombMode) {
-                    if (this.grid[i][j].contain(mouseX, mouseY) && this.grid[i][j].marked == false) {
+                    if (this.grid[i][j].contain(mouseX, mouseY) && !this.grid[i][j].marked) {
                         this.grid[i][j].Mark();
-                    } else if ((this.grid[i][j].contain(mouseX, mouseY) && this.grid[i][j].marked == true)) {
+                    } else if ((this.grid[i][j].contain(mouseX, mouseY) && this.grid[i][j].marked)) {
                         this.grid[i][j].UnMark();
                     }
-                    if (this.grid[i][j].marked == false && this.grid[i][j].contain(mouseX, mouseY) && this.grid[i][j].revealed) {
+                    if (!this.grid[i][j].marked && this.grid[i][j].contain(mouseX, mouseY) && this.grid[i][j].revealed) {
                         this.grid[i][j].reveal();
                     }
-                }
-                if (this.bombMode) {
-                    if (this.grid[i][j].marked == false && this.grid[i][j].contain(mouseX, mouseY)) {
+                } else if (this.bombMode) {
+                    if (!this.grid[i][j].marked && this.grid[i][j].contain(mouseX, mouseY)) {
                         this.grid[i][j].reveal();
                     }
                 }
             }
         }
     }
-
-
-
-
 }

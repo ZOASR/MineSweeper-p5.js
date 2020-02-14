@@ -1,6 +1,6 @@
 const scl = 25;
 const rows = 30;
-const cols = 30;
+const cols = 45;
 const font = "Share Tech Mono";
 
 let board;

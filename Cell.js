@@ -31,8 +31,8 @@ class Cell {
     constructor(i, j, board) {
         this.i = i;
         this.j = j;
-        this.x = this.i * scl + board.x;
-        this.y = (this.j * scl) + 100 + board.y;
+        this.x = this.i * board.scl + board.x;
+        this.y = (this.j * board.scl) + 100 + board.y;
         this.revealed = false;
         this.marked = false;
         this.total = 0;
@@ -47,26 +47,27 @@ class Cell {
             fill(255);
             stroke(50);
             strokeWeight(2);
-            image(square, this.x, this.y, scl, scl);
+            image(square, this.x, this.y, this.board.scl, this.board.scl);
         } else if (this.revealed) {
             fill(185);
             stroke(117);
             strokeWeight(2);
             rectMode(CORNER);
-            rect(this.x, this.y, scl, scl);
+            rect(this.x, this.y, this.board.scl, this.board.scl);
         }
 
         if (this.marked) {
             imageMode(CORNER);
             fill(0);
-            image(flag, this.x, this.y, scl, scl);
+            image(flag, this.x, this.y, this.board.scl, this.board.scl);
         }
 
         if (this.mine && this.revealed) {
             imageMode(CORNER);
             fill(0);
             noStroke();
-            image(bomb, this.x, this.y, scl, scl);
+            image(bomb, this.x, this.y, this.board.scl, this.board.scl);
+            this.board.gameOver();
         } else if (this.revealed) {
             fill(0);
             noStroke();
@@ -74,32 +75,34 @@ class Cell {
                 imageMode(CENTER);
                 switch (this.total) {
                     case 1:
-                        image(one, this.x + scl * 0.5, this.y + scl * 0.5, scl * 0.64, scl * 0.64);
+                        image(one, this.x + this.board.scl * 0.5, this.y + this.board.scl * 0.5, this.board.scl * 0.64, this.board.scl * 0.64);
                         break;
                     case 2:
-                        image(two, this.x + scl * 0.5, this.y + scl * 0.5, scl * 0.64, scl * 0.64);
+                        image(two, this.x + this.board.scl * 0.5, this.y + this.board.scl * 0.5, this.board.scl * 0.64, this.board.scl * 0.64);
                         break;
                     case 3:
-                        image(three, this.x + scl * 0.5, this.y + scl * 0.5, scl * 0.64, scl * 0.64);
+                        image(three, this.x + this.board.scl * 0.5, this.y + this.board.scl * 0.5, this.board.scl * 0.64, this.board.scl * 0.64);
                         break;
                     case 4:
-                        image(four, this.x + scl * 0.5, this.y + scl * 0.5, scl * 0.64, scl * 0.64);
+                        image(four, this.x + this.board.scl * 0.5, this.y + this.board.scl * 0.5, this.board.scl * 0.64, this.board.scl * 0.64);
                         break;
                     case 5:
-                        image(five, this.x + scl * 0.5, this.y + scl * 0.5, scl * 0.64, scl * 0.64);
+                        image(five, this.x + this.board.scl * 0.5, this.y + this.board.scl * 0.5, this.board.scl * 0.64, this.board.scl * 0.64);
                         break;
                     case 6:
-                        image(six, this.x + scl * 0.5, this.y + scl * 0.5, scl * 0.64, scl * 0.64);
+                        image(six, this.x + this.board.scl * 0.5, this.y + this.board.scl * 0.5, this.board.scl * 0.64, this.board.scl * 0.64);
                         break;
                     case 7:
-                        image(seven, this.x + scl * 0.5, this.y + scl * 0.5, scl * 0.64, scl * 0.64);
+                        image(seven, this.x + this.board.scl * 0.5, this.y + this.board.scl * 0.5, this.board.scl * 0.64, this.board.scl * 0.64);
                         break;
                     case 8:
-                        image(eight, this.x + scl * 0.5, this.y + scl * 0.5, scl * 0.64, scl * 0.64);
+                        image(eight, this.x + this.board.scl * 0.5, this.y + this.board.scl * 0.5, this.board.scl * 0.64, this.board.scl * 0.64);
                         break;
                 }
             }
         }
+        this.checkNeighbor();
+        this.checkMarked();
     }
 
 
@@ -109,14 +112,12 @@ class Cell {
         if (!this.revealed) {
             this.marked = true;
             this.board.markedBombs++;
-            console.log(this.board.markedBombs);
         }
     }
     UnMark() {
         if (!this.revealed) {
             this.marked = false;
             this.board.markedBombs--;
-            console.log(this.board.markedBombs);
         }
     }
 
@@ -131,7 +132,7 @@ class Cell {
             for (let yoff = -1; yoff <= 1; yoff++) {
                 const i_ = this.i + xoff;
                 const j_ = this.j + yoff;
-                if (i_ > -1 && i_ < cols && j_ > -1 && j_ < cols) {
+                if (i_ > -1 && i_ < this.board.cols && j_ > -1 && j_ < this.board.rows) {
                     let neighbor = this.board.grid[i_][j_];
                     if (neighbor.mine) {
                         total++;
@@ -145,7 +146,7 @@ class Cell {
 
 
     contain(x, y) {
-        if (x > this.x && x < this.x + scl && y > this.y && y < this.y + scl) {
+        if (x > this.x && x < this.x + this.board.scl && y > this.y && y < this.y + this.board.scl) {
             return true;
         }
     }
@@ -167,7 +168,7 @@ class Cell {
             for (let yoff = -1; yoff <= 1; yoff++) {
                 const i_ = this.i + xoff;
                 const j_ = this.j + yoff;
-                if (i_ > -1 && i_ < cols && j_ > -1 && j_ < cols) {
+                if (i_ > -1 && i_ < this.board.cols && j_ > -1 && j_ < this.board.rows) {
                     const neighbor = this.board.grid[i_][j_];
                     if (!neighbor.mine && !neighbor.revealed) {
                         neighbor.reveal();
@@ -183,7 +184,7 @@ class Cell {
             for (let yoff = -1; yoff <= 1; yoff++) {
                 const i_ = this.i + xoff;
                 const j_ = this.j + yoff;
-                if (i_ > -1 && i_ < cols && j_ > -1 && j_ < cols) {
+                if (i_ > -1 && i_ < this.board.cols && j_ > -1 && j_ < this.board.rows) {
                     const neighbor = this.board.grid[i_][j_];
                     if (!neighbor.revealed && !neighbor.marked) {
                         neighbor.reveal();
@@ -202,7 +203,7 @@ class Cell {
             for (let yoff = -1; yoff <= 1; yoff++) {
                 const i_ = this.i + xoff;
                 const j_ = this.j + yoff;
-                if (i_ > -1 && i_ < cols && j_ > -1 && j_ < cols) {
+                if (i_ > -1 && i_ < this.board.cols && j_ > -1 && j_ < this.board.rows) {
                     const neighbor = this.board.grid[i_][j_];
                     if (neighbor.marked) {
                         Mtotal++;
