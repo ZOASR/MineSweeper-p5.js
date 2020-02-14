@@ -101,7 +101,7 @@ class Board {
 
     WIN() {
         imageMode(CENTER);
-        image(cool, this.scl * this.rows / 2, this.scl * this.cols / 2, this.scl * this.rows + this.x, this.scl * this.cols + this.y);
+        image(cool, this.scl * this.rows / 2 + this.x, this.scl * this.cols / 2 + this.y, this.scl * this.rows, this.scl * this.cols);
         setTimeout(noLoop, 50);
         setTimeout(window.location.reload(), 2000);
     }
