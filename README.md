@@ -1,8 +1,6 @@
 # MineSweeper
 
-```
-Try it here : https://zoasr.github.io/MineSweeper-p5.js/
-```
+**Try it here** : https://zoasr.github.io/MineSweeper-p5.js/
 
 # Library Used
 
