@@ -22,7 +22,9 @@ function setup() {
 }
 
 function mousePressed() {
+    loop();
     board.check();
+    noLoop();
 }
 
 function draw() {

@@ -102,7 +102,6 @@ class Board {
         noStroke();
         textFont("Arial");
         textAlign(LEFT);
-        frameRate(10);
 
         this.easy.mousePressed(() => {
             this.bombs = 50;

@@ -71,7 +71,7 @@ class Cell {
         } else if (this.revealed) {
             fill(0);
             noStroke();
-            if (this.total > 0) {
+            if (this.total > 0 && this.revealed && !this.marked) {
                 imageMode(CENTER);
                 switch (this.total) {
                     case 1:
@@ -153,12 +153,7 @@ class Cell {
 
     reveal() {
         this.revealed = true;
-        if (this.total == 0) {
-            this.floodFill();
-        }
-        if (this.markedMines == this.total) {
-            this.floodFillM();
-        }
+        this.floodFill();
     }
 
 
@@ -170,7 +165,10 @@ class Cell {
                 const j_ = this.j + yoff;
                 if (i_ > -1 && i_ < this.board.cols && j_ > -1 && j_ < this.board.rows) {
                     const neighbor = this.board.grid[i_][j_];
-                    if (!neighbor.mine && !neighbor.revealed) {
+                    if (!neighbor.mine && !neighbor.revealed && this.total == 0) {
+                        neighbor.reveal();
+                        neighbor.UnMark();
+                    } else if (!neighbor.revealed && !neighbor.marked && this.markedMines == this.total) {
                         neighbor.reveal();
                         neighbor.UnMark();
                     }
@@ -179,21 +177,21 @@ class Cell {
         }
     }
 
-    floodFillM() {
-        for (let xoff = -1; xoff <= 1; xoff++) {
-            for (let yoff = -1; yoff <= 1; yoff++) {
-                const i_ = this.i + xoff;
-                const j_ = this.j + yoff;
-                if (i_ > -1 && i_ < this.board.cols && j_ > -1 && j_ < this.board.rows) {
-                    const neighbor = this.board.grid[i_][j_];
-                    if (!neighbor.revealed && !neighbor.marked) {
-                        neighbor.reveal();
-                        neighbor.UnMark();
-                    }
-                }
-            }
-        }
-    }
+    // floodFillM() {
+    //     for (let xoff = -1; xoff <= 1; xoff++) {
+    //         for (let yoff = -1; yoff <= 1; yoff++) {
+    //             const i_ = this.i + xoff;
+    //             const j_ = this.j + yoff;
+    //             if (i_ > -1 && i_ < this.board.cols && j_ > -1 && j_ < this.board.rows) {
+    //                 const neighbor = this.board.grid[i_][j_];
+    //                 if (!neighbor.revealed && !neighbor.marked) {
+    //                     neighbor.reveal();
+    //                     neighbor.UnMark();
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
 
 
 
