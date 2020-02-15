@@ -177,23 +177,6 @@ class Cell {
         }
     }
 
-    // floodFillM() {
-    //     for (let xoff = -1; xoff <= 1; xoff++) {
-    //         for (let yoff = -1; yoff <= 1; yoff++) {
-    //             const i_ = this.i + xoff;
-    //             const j_ = this.j + yoff;
-    //             if (i_ > -1 && i_ < this.board.cols && j_ > -1 && j_ < this.board.rows) {
-    //                 const neighbor = this.board.grid[i_][j_];
-    //                 if (!neighbor.revealed && !neighbor.marked) {
-    //                     neighbor.reveal();
-    //                     neighbor.UnMark();
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
-
-
 
     checkMarked() {
         let Mtotal = 0;
