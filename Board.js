@@ -193,7 +193,6 @@ class Board {
                                 mousePressed();
                                 this.grid[floor(random(this.cols))][floor(random(this.rows))].mine = true;
                                 this.firstPlay = false;
-                                console.log("it's working~~");
                             } else if ((!this.firstPlay || this.firstPlay) && (!this.grid[i][j].mine)) {
                                 this.grid[i][j].reveal();
                                 this.firstPlay = false;
@@ -205,6 +204,5 @@ class Board {
                 }
             }
         }
-
     }
 }
