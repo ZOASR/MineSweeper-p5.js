@@ -71,6 +71,9 @@ class Cell {
         } else if (this.revealed) {
             fill(0);
             noStroke();
+            if (this.total == 0) {
+                this.floodFill();
+            }
             if (this.total > 0 && this.revealed && !this.marked) {
                 imageMode(CENTER);
                 switch (this.total) {

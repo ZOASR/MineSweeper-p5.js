@@ -10,6 +10,7 @@ class Board {
         this.markedBombs = 0;
         this.revealedBombs = 0;
         this.bombMode = true;
+        this.firstPlay = true;
         this.easy = createButton('Easy: 50 Mines');
         this.medium = createButton('Medium: 150 Mines');
         this.hard = createButton('Hard: 250 Mines');
@@ -170,23 +171,40 @@ class Board {
     }
 
     check() {
-        for (let i = 0; i < this.cols; i++) {
-            for (let j = 0; j < this.rows; j++) {
-                if (!this.bombMode) {
-                    if (this.grid[i][j].contain(mouseX, mouseY) && !this.grid[i][j].marked) {
-                        this.grid[i][j].Mark();
-                    } else if ((this.grid[i][j].contain(mouseX, mouseY) && this.grid[i][j].marked)) {
-                        this.grid[i][j].UnMark();
-                    }
-                    if (!this.grid[i][j].marked && this.grid[i][j].contain(mouseX, mouseY) && this.grid[i][j].revealed) {
-                        this.grid[i][j].reveal();
-                    }
-                } else if (this.bombMode) {
-                    if (!this.grid[i][j].marked && this.grid[i][j].contain(mouseX, mouseY)) {
-                        this.grid[i][j].reveal();
+        if (this.bombs >= 50) {
+            for (let i = 0; i < this.cols; i++) {
+                for (let j = 0; j < this.rows; j++) {
+                    if (!this.bombMode) {
+                        if (this.grid[i][j].contain(mouseX, mouseY) && !this.grid[i][j].marked) {
+                            this.grid[i][j].Mark();
+                        } else if ((this.grid[i][j].contain(mouseX, mouseY) && this.grid[i][j].marked)) {
+                            this.grid[i][j].UnMark();
+                        }
+                        if (!this.grid[i][j].marked && this.grid[i][j].contain(mouseX, mouseY) && this.grid[i][j].revealed) {
+                            this.grid[i][j].reveal();
+                        }
+                    } else if (this.bombMode) {
+                        if (!this.grid[i][j].marked && this.grid[i][j].contain(mouseX, mouseY)) {
+                            if (this.firstPlay && this.grid[i][j].mine) {
+                                this.grid[i][j].mine = false;
+                                this.grid[i][j].reveal();
+                                this.grid[i][j].show();
+                                this.grid[i][j].floodFill();
+                                mousePressed();
+                                this.grid[floor(random(this.cols))][floor(random(this.rows))].mine = true;
+                                this.firstPlay = false;
+                                console.log("it's working~~");
+                            } else if ((!this.firstPlay || this.firstPlay) && (!this.grid[i][j].mine)) {
+                                this.grid[i][j].reveal();
+                                this.firstPlay = false;
+                            } else if (!this.firstPlay && this.grid[i][j].mine) {
+                                this.grid[i][j].reveal();
+                            }
+                        }
                     }
                 }
             }
         }
+
     }
 }
