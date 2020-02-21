@@ -54,29 +54,12 @@ class Board {
         this.message.position(this.cols * this.scl + 50 + this.x, 140 + this.y);
         this.message.show();
 
-        for (let i = 0; i < this.bombs; i++) {
-            const x = floor(random(this.cols));
-            const y = floor(random(this.rows));
-            this.grid[x][y].mine = true;
-            this.n++;
-        }
-        if (this.n < this.bombs) {
-            for (let i = 0; i < this.bombs - this.n; i++) {
-                let x = floor(random(this.cols));
-                let y = floor(random(this.rows));
-                if (this.grid[x][y].mine == false) {
-                    this.grid[x][y].mine = true;
-                } else if (this.grid[x][y].mine) {
-                    x = floor(random(this.cols));
-                    y = floor(random(this.rows));
-                    this.grid[x][y].mine = true;
-                }
-            }
-        } else if (this.n > this.bombs) {
-            for (let i = 0; i < this.bombs - this.n; i++) {
-                const x = floor(random(this.cols));
-                const y = floor(random(this.rows));
-                this.grid[x][y].mine = false;
+        while (this.n < this.bombs) {
+            let x = floor(random(this.cols));
+            let y = floor(random(this.rows));
+            if (!this.grid[x][y].mine) {
+                this.grid[x][y].mine = true;
+                this.n++;
             }
         }
     }
