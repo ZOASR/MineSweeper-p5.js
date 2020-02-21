@@ -6,6 +6,8 @@ class Board {
         this.rows = rows;
         this.grid = make2DArray(cols, rows);
         this.scl = scl;
+        this.width = this.cols * this.scl;
+        this.height = this.rows * this.scl;
         this.bombs = 0;
         this.markedBombs = 0;
         this.revealedBombs = 0;
@@ -14,7 +16,8 @@ class Board {
         this.easy = createButton('Easy: 50 Mines');
         this.medium = createButton('Medium: 150 Mines');
         this.hard = createButton('Hard: 250 Mines');
-        this.message = createP('(To Change Difficulty: REFRESH)');
+        this.message = createP("(To Change Difficulty: REFRESH)");
+        this.difficulty = createP();
         this.message1 = createP('(Change Mode: Changes Whether to use flag Or Bomb)');
         this.button = createButton('Change Mode');
         this.n = 0;
@@ -25,12 +28,12 @@ class Board {
         });
 
 
-        this.button.position(this.cols * this.scl + 50 + this.x, 100 + this.y);
-        this.easy.position(this.cols * this.scl + 50 + this.x, 125 + this.y);
-        this.medium.position(this.cols * this.scl + 50 + this.x, 145 + this.y);
-        this.hard.position(this.cols * this.scl + 50 + this.x, 165 + this.y);
-        this.message.position(this.cols * this.scl + 50 + this.x, 175 + this.y);
-        this.message1.position(this.cols * this.scl + 50 + this.x, 45 + this.y);
+        this.button.position(this.width + 50 + this.x, 100 + this.y);
+        this.easy.position(this.width + 50 + this.x, 125 + this.y);
+        this.medium.position(this.width + 50 + this.x, 145 + this.y);
+        this.hard.position(this.width + 50 + this.x, 165 + this.y);
+        this.message.position(this.width + 50 + this.x, 175 + this.y);
+        this.message1.position(this.width + 50 + this.x, 45 + this.y);
 
         for (let i = 0; i < this.cols; i++) {
             for (let j = 0; j < this.rows; j++) {
@@ -51,7 +54,7 @@ class Board {
         this.medium.hide();
         this.hard.hide();
 
-        this.message.position(this.cols * this.scl + 50 + this.x, 140 + this.y);
+        this.message.position(this.width + 50 + this.x, 140 + this.y);
         this.message.show();
 
         while (this.n < this.bombs) {
@@ -74,35 +77,38 @@ class Board {
                 this.grid[i][j].UnMark();
             }
         }
-        setTimeout(noLoop, 50);
         console.warn('Game Over');
-        setTimeout(window.location.reload(), 2000);
+        setTimeout(() =>window.location.reload(), 3000);
     }
 
 
     WIN() {
         imageMode(CENTER);
-        image(cool, (this.scl * this.rows + this.x) / 2, (this.scl * this.cols + this.y) / 2, this.scl * this.rows, this.scl * this.rows);
-        setTimeout(noLoop, 50);
-        setTimeout(window.location.reload(), 2000);
+        image(cool, (this.height + this.x) / 2, (this.width + this.y) / 2, this.height, this.height);
+        setTimeout(() => window.location.reload(), 3000);
     }
 
     show() {
         fill(255);
         noStroke();
-        textFont("Arial");
         textAlign(LEFT);
 
         this.easy.mousePressed(() => {
             this.bombs = 50;
+            this.difficulty = createP("Difficulty: Easy");
+            this.difficulty.position(this.width + 50 + this.x, this.message.y + this.y);
             this.populateBoard();
         });
         this.medium.mousePressed(() => {
             this.bombs = 150;
+            this.difficulty = createP('Difficulty: Medium');
+            this.difficulty.position(this.width + 50 + this.x, this.message.y + this.y);
             this.populateBoard();
         });
         this.hard.mousePressed(() => {
             this.bombs = 250;
+            this.difficulty = createP('Difficulty: Hard');
+            this.difficulty.position(this.width + 50 + this.x, this.message.y + this.y);
             this.populateBoard();
         });
 
@@ -111,12 +117,12 @@ class Board {
         if (this.bombMode) {
             fill(0);
             textSize(20);
-            text("Bomb Mode", this.cols * this.scl + 160 + this.x, 120 + this.y);
+            text("Bomb Mode", this.width + 160 + this.x, 120 + this.y);
 
         } else if (!this.bombMode) {
             fill(0);
             textSize(20);
-            text("Flag Mode ", this.cols * this.scl + 160 + this.x, 120 + this.y);
+            text("Flag Mode ", this.width + 160 + this.x, 120 + this.y);
         }
 
 
@@ -128,7 +134,8 @@ class Board {
             }
         } else if (this.bombs == 0) {
             textSize(50);
-            text('Please Choose Difficulty', 60 + this.x, 200 + this.y);
+            textAlign(CENTER);
+            text('Please Choose Difficulty', this.width / 2 + this.x, 200 + this.y);
         }
 
 
@@ -143,17 +150,17 @@ class Board {
         stroke(255);
         strokeWeight(5);
         rectMode(CENTER);
-        rect(this.cols * this.scl / 2 + 10 + this.x, 48 + this.y, 200, 80);
+        rect(this.width / 2 + 10 + this.x, 48 + this.y, 200, 80);
 
-        textFont(font);
         textSize(90);
         textAlign(CENTER);
         fill(255, 0, 0);
         noStroke();
-        text(this.bombs - this.markedBombs, (this.cols * this.scl / 2) + this.x, 80 + this.y);
+        text(this.bombs - this.markedBombs, (this.width / 2) + this.x, 80 + this.y);
     }
 
     check() {
+        loop();
         if (this.bombs >= 50) {
             for (let i = 0; i < this.cols; i++) {
                 for (let j = 0; j < this.rows; j++) {
@@ -184,8 +191,11 @@ class Board {
                             }
                         }
                     }
+                    if (this.grid[i][j].mine && this.grid[i][j].revealed)
+                        this.gameOver();
                 }
             }
         }
+        noLoop();
     }
 }

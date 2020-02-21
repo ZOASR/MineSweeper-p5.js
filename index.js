@@ -1,6 +1,6 @@
 const scl = 25;
 const rows = 30;
-const cols = 45;
+const cols = 40;
 const font = "Share Tech Mono";
 
 let board;
@@ -17,14 +17,14 @@ function make2DArray(col, row) {
 
 function setup() {
     createCanvas(innerWidth, innerHeight);
+    textFont(font);
     const boardWidth = cols * scl;
-    board = new Board(width / 2 - boardWidth / 2, 20, cols, rows, scl);
+    board = new Board(width / 2 - boardWidth / 2 - 100, 20, cols, rows, scl);
+    noLoop();
 }
 
 function mousePressed() {
-    loop();
     board.check();
-    noLoop();
 }
 
 function draw() {
