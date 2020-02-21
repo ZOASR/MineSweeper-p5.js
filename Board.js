@@ -78,13 +78,13 @@ class Board {
             }
         }
         console.warn('Game Over');
-        setTimeout(() =>window.location.reload(), 3000);
+        setTimeout(() => window.location.reload(), 3000);
     }
 
 
     WIN() {
         imageMode(CENTER);
-        image(cool, (this.height + this.x) / 2, (this.width + this.y) / 2, this.height, this.height);
+        image(cool, (this.width / 2 + this.x), (this.height / 2 + this.y + 100), this.height, this.height);
         setTimeout(() => window.location.reload(), 3000);
     }
 
