@@ -67,6 +67,7 @@ class Cell {
             fill(0);
             noStroke();
             image(bomb, this.x, this.y, this.board.scl, this.board.scl);
+            this.board.gameOver();
         } else if (this.revealed) {
             fill(0);
             noStroke();
