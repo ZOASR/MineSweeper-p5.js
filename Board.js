@@ -171,7 +171,7 @@ class Board {
                             this.grid[i][j].UnMark();
                         }
                         if (!this.grid[i][j].marked && this.grid[i][j].contain(mouseX, mouseY) && this.grid[i][j].revealed) {
-                            this.grid[i][j].reveal();
+                            this.grid[i][j].floodFill();
                         }
                     } else if (this.bombMode) {
                         if (!this.grid[i][j].marked && this.grid[i][j].contain(mouseX, mouseY)) {
