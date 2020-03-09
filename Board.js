@@ -10,6 +10,7 @@ class Board {
         this.height = this.rows * this.scl;
         this.bombs = 0;
         this.markedBombs = 0;
+        this.actualBombs = 0;
         this.revealedBombs = 0;
         this.bombMode = true;
         this.firstPlay = true;
@@ -71,10 +72,12 @@ class Board {
     gameOver() {
         fill(255, 0, 0);
         stroke(125);
-        for (let i = 0; i < this.cols; i++) {
-            for (let j = 0; j < this.rows; j++) {
-                this.grid[i][j].reveal();
-                this.grid[i][j].UnMark();
+        for (let k = 0; k < 2; k++) {
+            for (let i = 0; i < this.cols; i++) {
+                for (let j = 0; j < this.rows; j++) {
+                    this.grid[i][j].reveal();
+                    this.grid[i][j].UnMark();
+                }
             }
         }
         console.warn('Game Over');
@@ -141,7 +144,7 @@ class Board {
 
 
 
-        if ((this.markedBombs >= this.bombs || this.markedBombs >= this.n) && this.bombs > 0 && this.markedBombs > 0) {
+        if ((this.actualBombs >= this.bombs || this.actualBombs >= this.n) && this.bombs > 0 && this.actualBombs > 0) {
             this.WIN();
         }
 

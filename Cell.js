@@ -115,12 +115,18 @@ class Cell {
         if (!this.revealed) {
             this.marked = true;
             this.board.markedBombs++;
+            if (this.mine) {
+                this.board.actualBombs++;
+            }
         }
     }
     UnMark() {
         if (!this.revealed) {
             this.marked = false;
             this.board.markedBombs--;
+            if (this.mine) {
+                this.board.actualBombs--;
+            }
         }
     }
 

@@ -16,7 +16,7 @@ function make2DArray(col, row) {
 
 
 function setup() {
-    createCanvas(innerWidth, innerHeight);
+    createCanvas(windowWidth, windowHeight);
     textFont(font);
     const boardWidth = cols * scl;
     board = new Board(width / 2 - boardWidth / 2 - 100, 20, cols, rows, scl);
