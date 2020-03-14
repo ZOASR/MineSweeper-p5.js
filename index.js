@@ -23,6 +23,10 @@ function setup() {
     noLoop();
 }
 
+function windowResized() {
+    resizeCanvas(windowWidth, windowHeight);
+}
+
 function mousePressed() {
     board.check();
 }
