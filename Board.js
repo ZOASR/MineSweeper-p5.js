@@ -179,12 +179,20 @@ class Board {
                     } else if (this.bombMode) {
                         if (!this.grid[i][j].marked && this.grid[i][j].contain(mouseX, mouseY)) {
                             if (this.firstPlay && this.grid[i][j].mine) {
+                                let b = true;
                                 this.grid[i][j].mine = false;
                                 this.grid[i][j].reveal();
                                 this.grid[i][j].show();
                                 this.grid[i][j].floodFill();
                                 mousePressed();
-                                this.grid[floor(random(this.cols))][floor(random(this.rows))].mine = true;
+                                while (b) {
+                                    let x = floor(random(this.cols));
+                                    let y = floor(random(this.rows));
+                                    if (!this.grid[x][y].mine) {
+                                        this.grid[x][y].mine = true;
+                                        b = false;
+                                    }
+                                }
                                 this.firstPlay = false;
                             } else if ((!this.firstPlay || this.firstPlay) && (!this.grid[i][j].mine)) {
                                 this.grid[i][j].reveal();
