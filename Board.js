@@ -68,6 +68,29 @@ class Board {
         }
     }
 
+    resetBoard() {
+        for (let i = 0; i < this.cols; i++) {
+            for (let j = 0; j < this.rows; j++) {
+                this.grid[i][j].revealed = false;
+                this.grid[i][j].mine = false;
+                this.grid[i][j].UnMark();
+            }
+        }
+        this.bombs = 0;
+        this.markedBombs = 0;
+        this.actualBombs = 0;
+        this.revealedBombs = 0;
+        this.n = 0;
+        this.bombMode = true;
+        this.firstPlay = true;
+        this.easy.show();
+        this.medium.show();
+        this.hard.show();
+        this.message.hide();
+        this.difficulty.hide();
+        this.check();
+    }
+
 
     gameOver() {
         fill(255, 0, 0);
@@ -81,14 +104,14 @@ class Board {
             }
         }
         console.warn('Game Over');
-        setTimeout(() => window.location.reload(), 3000);
+        setTimeout(() => this.resetBoard(), 3000);
     }
 
 
     WIN() {
         imageMode(CENTER);
         image(cool, (this.width / 2 + this.x), (this.height / 2 + this.y + 100), this.height, this.height);
-        setTimeout(() => window.location.reload(), 3000);
+        setTimeout(() => this.resetBoard(), 3000);
     }
 
     show() {
