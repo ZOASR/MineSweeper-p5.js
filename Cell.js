@@ -109,8 +109,6 @@ class Cell {
     }
 
 
-
-
     Mark() {
         if (!this.revealed) {
             this.marked = true;
@@ -142,7 +140,7 @@ class Cell {
                 const i_ = this.i + xoff;
                 const j_ = this.j + yoff;
                 if (i_ > -1 && i_ < this.board.cols && j_ > -1 && j_ < this.board.rows) {
-                    let neighbor = this.board.grid[i_][j_];
+                    const neighbor = this.board.grid[i_][j_];
                     if (neighbor.mine) {
                         total++;
                     }

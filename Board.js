@@ -165,8 +165,6 @@ class Board {
         }
 
 
-
-
         if ((this.actualBombs >= this.bombs || this.actualBombs >= this.n) && this.bombs > 0 && this.actualBombs > 0) {
             this.WIN();
         }
@@ -190,23 +188,24 @@ class Board {
         if (this.bombs >= 50) {
             for (let i = 0; i < this.cols; i++) {
                 for (let j = 0; j < this.rows; j++) {
+                    const cell = this.grid[i][j];
                     if (!this.bombMode) {
-                        if (this.grid[i][j].contain(mouseX, mouseY) && !this.grid[i][j].marked) {
-                            this.grid[i][j].Mark();
+                        if (cell.contain(mouseX, mouseY) && !cell.marked) {
+                            cell.Mark();
                         } else if ((this.grid[i][j].contain(mouseX, mouseY) && this.grid[i][j].marked)) {
-                            this.grid[i][j].UnMark();
+                            cell.UnMark();
                         }
-                        if (!this.grid[i][j].marked && this.grid[i][j].contain(mouseX, mouseY) && this.grid[i][j].revealed) {
-                            this.grid[i][j].floodFill();
+                        if (!cell.marked && cell.contain(mouseX, mouseY) && cell.revealed) {
+                            cell.floodFill();
                         }
                     } else if (this.bombMode) {
-                        if (!this.grid[i][j].marked && this.grid[i][j].contain(mouseX, mouseY)) {
-                            if (this.firstPlay && this.grid[i][j].mine) {
+                        if (!cell.marked && cell.contain(mouseX, mouseY)) {
+                            if (this.firstPlay && cell.mine) {
                                 let b = true;
-                                this.grid[i][j].mine = false;
-                                this.grid[i][j].reveal();
-                                this.grid[i][j].show();
-                                this.grid[i][j].floodFill();
+                                cell.mine = false;
+                                cell.reveal();
+                                cell.show();
+                                cell.floodFill();
                                 mousePressed();
                                 while (b) {
                                     let x = floor(random(this.cols));
@@ -217,15 +216,15 @@ class Board {
                                     }
                                 }
                                 this.firstPlay = false;
-                            } else if ((!this.firstPlay || this.firstPlay) && (!this.grid[i][j].mine)) {
-                                this.grid[i][j].reveal();
+                            } else if ((!this.firstPlay || this.firstPlay) && (!cell.mine)) {
+                                cell.reveal();
                                 this.firstPlay = false;
-                            } else if (!this.firstPlay && this.grid[i][j].mine) {
-                                this.grid[i][j].reveal();
+                            } else if (!this.firstPlay && cell.mine) {
+                                cell.reveal();
                             }
                         }
                     }
-                    if (this.grid[i][j].mine && this.grid[i][j].revealed)
+                    if (cell.mine && cell.revealed)
                         this.gameOver();
                 }
             }
