@@ -7,31 +7,31 @@ let board;
 
 
 function make2DArray(col, row) {
-    let arr = new Array(col);
-    for (let i = 0; i < col; i++) {
-        arr[i] = new Array(row);
-    }
-    return arr;
+	let arr = new Array(col);
+	for (let i = 0; i < col; i++) {
+		arr[i] = new Array(row);
+	}
+	return arr;
 }
 
 
 function setup() {
-    createCanvas(windowWidth, windowHeight);
-    textFont(font);
-    const boardWidth = cols * scl;
-    board = new Board(width / 2 - boardWidth / 2 - 100, 20, cols, rows, scl);
-    noLoop();
+	createCanvas(windowWidth, windowHeight);
+	textFont(font);
+	const boardWidth = cols * scl;
+	board = new Board(width / 2 - boardWidth / 2 - 100, 20, cols, rows, scl);
+	noLoop();
 }
 
 function windowResized() {
-    resizeCanvas(windowWidth, windowHeight);
+	resizeCanvas(windowWidth, windowHeight);
 }
 
 function mousePressed() {
-    board.check();
+	board.check();
 }
 
 function draw() {
-    background(187);
-    board.show();
+	background(187);
+	board.show();
 }
